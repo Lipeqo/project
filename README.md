@@ -26,3 +26,4 @@ Nr studenta: 97155
 
 * [x] **Artefakt 1:** Architektura i struktura folderów.
 * [x] **Artefakt 2:** Środowisko wielokontenerowe uruchomione lokalnie (Docker Compose).
+* [x] **Artefakt 3:** Działająca warstwa prenzentacji.
