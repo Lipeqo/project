@@ -25,3 +25,4 @@ Nr studenta: 97155
 - docs/
 
 * [x] **Artefakt 1:** Architektura i struktura folderów.
+* [x] **Artefakt 2:** Środowisko wielokontenerowe uruchomione lokalnie (Docker Compose).
