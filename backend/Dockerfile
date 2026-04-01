@@ -2,8 +2,9 @@ FROM node:24
 
 WORKDIR /app
 
+COPY package*.json ./
+RUN npm install
+
 COPY . .
 
-RUN npm init -y
-
-CMD ["node", "-e", "console.log('Backend działa')"]
+CMD ["node", "index.js"]

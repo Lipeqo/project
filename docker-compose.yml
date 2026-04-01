@@ -11,9 +11,14 @@ services:
   backend:
     build: ./backend
     ports:
-      - "5000:5000"
+      - "8081:8081"   # 👈 zmiana na 8081
     depends_on:
       - db
+    environment:
+      DB_SERVER: db
+      DB_USER: sa
+      DB_PASSWORD: YourStrong!Pass123
+      DB_NAME: master
 
   db:
     image: mcr.microsoft.com/mssql/server:2022-latest
