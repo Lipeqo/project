@@ -28,3 +28,4 @@ Nr studenta: 97155
 * [x] **Artefakt 2:** Środowisko wielokontenerowe uruchomione lokalnie (Docker Compose).
 * [x] **Artefakt 3:** Działająca warstwa prenzentacji.
 * [x] **Artefakt 4:**  Działająca warstwa logiki backendu.
+* [x] **Artefakt nr 5:** System gotowy na chmurę

@@ -1,65 +1,95 @@
 const sql = require("mssql");
+const TaskReadDto = require("../dto/TaskReadDto");
 
-// 📦 dane (tymczasowe)
-let tasks = [
-  { id: 1, name: "Zadanie 1" },
-  { id: 2, name: "Zadanie 2" }
-];
-
-// GET all (z DB)
+// GET ALL (z DB)
 const getAllTasks = async (req, res) => {
   try {
-    const result = await sql.query("SELECT name FROM sys.databases");
-    res.status(200).json(result.recordset);
+    const result = await sql.query("SELECT Id, Name FROM Tasks");
+
+    const dto = result.recordset.map(t => 
+      new TaskReadDto({ id: t.Id, name: t.Name })
+    );
+
+    res.status(200).json(dto);
   } catch (err) {
     console.error(err);
     res.status(500).send("Błąd DB");
   }
 };
 
-// GET by id
-const getTaskById = (req, res) => {
-  const task = tasks.find(t => t.id == req.params.id);
-  if (!task) return res.status(404).json({ message: "Not found" });
+// GET BY ID (z DB)
+const getTaskById = async (req, res) => {
+  try {
+    const result = await sql.query(`
+      SELECT Id, Name FROM Tasks WHERE Id = ${req.params.id}
+    `);
 
-  res.status(200).json(task);
+    if (result.recordset.length === 0) {
+      return res.status(404).json({ message: "Not found" });
+    }
+
+    const task = result.recordset[0];
+
+    res.status(200).json(
+      new TaskReadDto({ id: task.Id, name: task.Name })
+    );
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Błąd DB");
+  }
 };
 
-// POST
-const createTask = (req, res) => {
+// POST (ZAPIS DO DB)
+const createTask = async (req, res) => {
   if (!req.body.name) {
     return res.status(400).json({ message: "Name required" });
   }
 
-  const newTask = {
-    id: tasks.length + 1,
-    name: req.body.name
-  };
+  try {
+    await sql.query(`
+      INSERT INTO Tasks (Name)
+      VALUES ('${req.body.name}')
+    `);
 
-  tasks.push(newTask);
-  res.status(201).json(newTask);
+    res.status(201).send();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Błąd zapisu");
+  }
 };
 
 // PUT
-const updateTask = (req, res) => {
-  const task = tasks.find(t => t.id == req.params.id);
-  if (!task) return res.status(404).json({ message: "Not found" });
-
+const updateTask = async (req, res) => {
   if (!req.body.name) {
     return res.status(400).json({ message: "Name required" });
   }
 
-  task.name = req.body.name;
-  res.status(200).json(task);
+  try {
+    await sql.query(`
+      UPDATE Tasks
+      SET Name='${req.body.name}'
+      WHERE Id=${req.params.id}
+    `);
+
+    res.status(200).send();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Błąd update");
+  }
 };
 
 // DELETE
-const deleteTask = (req, res) => {
-  const exists = tasks.find(t => t.id == req.params.id);
-  if (!exists) return res.status(404).json({ message: "Not found" });
+const deleteTask = async (req, res) => {
+  try {
+    await sql.query(`
+      DELETE FROM Tasks WHERE Id=${req.params.id}
+    `);
 
-  tasks = tasks.filter(t => t.id != req.params.id);
-  res.status(204).send();
+    res.status(204).send();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Błąd delete");
+  }
 };
 
 module.exports = {
