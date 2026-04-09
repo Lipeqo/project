@@ -2,7 +2,7 @@
 
 Autor: Filip Szatkowski
 Nr studenta: 97155  
-
+ 
 ## 🔧 Stack technologiczny
 
 - Frontend: React 19 + Vite
