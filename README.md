@@ -1,4 +1,4 @@
-# TaskFlow – aplikacja do zarządzania zadaniami
+# TaskFlow – aplikacja do zarządzania zadaniami 
 
 Autor: Filip Szatkowski
 Nr studenta: 97155  
